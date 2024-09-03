@@ -1,0 +1,51 @@
+pandora:
+  enabled: true
+  package: yandextank.plugins.Pandora
+  config_content:
+    pools:
+      - id: HTTP2
+        gun:
+          type: http
+          target: app.srwx.tech:443
+          ssl: true
+        ammo:
+          type: uri
+          uris:
+            - /
+        result:
+          type: phout
+          destination: ./phout.log
+        startup:
+          type: once
+          times: 1000
+        rps:
+          - type: const
+            ops: 150
+            duration: 180s
+        discard_overflow: true
+    log:
+      level: error
+    monitoring:
+      expvar:
+        enabled: true
+        port: 1234
+telegraf:
+  config:
+    hosts:
+      localhost: null
+    metrics:
+      cpu: null
+      mem: null
+      diskio: null
+      net: null
+      netstat: null
+      system: null
+      kernel: null
+  enabled: true
+  package: yandextank.plugins.Telegraf
+autostop:
+  enabled: true
+  package: yandextank.plugins.Autostop
+  autostop:
+    - limit(20m)
+core: {}
